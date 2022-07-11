@@ -11,6 +11,12 @@ namespace ET
     {
         
   #region UI辅助方法
+  
+
+
+  
+  
+  
 
         public static void SetText(this Text Label, string content )
         {
@@ -149,7 +155,7 @@ namespace ET
         #endregion
         
   #region UI按钮事件
-
+  
       public static void AddListenerAsyncWithId(this Button button, Func<int, ETTask> action,int id)
       { 
           button.onClick.RemoveAllListeners();
