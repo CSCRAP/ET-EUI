@@ -99,17 +99,33 @@ namespace ET
 
                         await DBManagerComponent.Instance.GetZoneDB(session.DomainZone()).Save(account);
                     }
-
+                    
+                    //操作登录中心服
+                    StartSceneConfig startSceneConfig = StartSceneConfigCategory.Instance.GetBySceneName(session.DomainZone(), "LoginCenter");
+                    long loginCenterInstanceIdnstanceId = startSceneConfig.InstanceId;
+                   var l2ALoginAccountResponse = (L2A_LoginAccountResponse)await ActorMessageSenderComponent.Instance.Call(loginCenterInstanceIdnstanceId,new A2L_LoginAccountRequest() { AccountId = account.Id });
+                  
+                   if (l2ALoginAccountResponse.Error != ErrorCode.ERR_Success)
+                   {
+                       response.Error = l2ALoginAccountResponse.Error;
+                       reply();
+                       session?.Disconnet().Coroutine();
+                       account?.Dispose();
+                       return;
+                   }
+                    
+                    
+                    
 
                     long accountSessionInstanceId = session.DomainScene().GetComponent<AccountSessionsComponent>().Get(account.Id);
 
-                   Session otherSession = Game.EventSystem.Get(accountSessionInstanceId) as Session;
-                   
-                   otherSession.Send(new A2C_Disconnet(){Error = 0 });
-                   otherSession.Disconnet().Coroutine();
-                   
-                   session.DomainScene().GetComponent<AccountSessionsComponent>().Add(account.Id,session.InstanceId);
-                   session.AddComponent<AccountCheckOutTimeComponent, long>(account.Id);
+                    Session otherSession = Game.EventSystem.Get(accountSessionInstanceId) as Session;
+
+                    otherSession.Send(new A2C_Disconnet(){Error = 0 });
+                    otherSession.Disconnet().Coroutine();
+
+                    session.DomainScene().GetComponent<AccountSessionsComponent>().Add(account.Id,session.InstanceId);
+                    session.AddComponent<AccountCheckOutTimeComponent, long>(account.Id);
 
 
                     string Token = TimeHelper.ServerNow().ToString() + RandomHelper.RandomNumber(int.MinValue,int.MaxValue).ToString(); 

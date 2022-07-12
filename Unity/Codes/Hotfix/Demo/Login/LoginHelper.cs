@@ -1,4 +1,5 @@
 using System;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 
 namespace ET
@@ -14,6 +15,8 @@ namespace ET
             try
             {
                 accountSession = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(address));
+
+               password = MD5Helper.StringMD5(password);
 
                a2CLoginAccount = (A2C_LoginAccount) await accountSession.Call(new C2A_LoginAccount() { AccountName = account, Password = password });
             }
@@ -34,8 +37,14 @@ namespace ET
 
             //保存session
             zoneScene.AddComponent<SessionComponent>().Session = accountSession;
-            zoneScene.GetComponent<AccountInfoComponent>().Token = a2CLoginAccount.Token;
+            //PingComponent组件每个一段时间向客户端发送一条消息，保证链接（与服务器的SessionIdleCheckerComponent相配合）
+            zoneScene.GetComponent<SessionComponent>().Session.AddComponent<PingComponent>();
 
+            //保存链接token和accountId
+            zoneScene.GetComponent<AccountInfoComponent>().Token = a2CLoginAccount.Token;
+            zoneScene.GetComponent<AccountInfoComponent>().AccountId = a2CLoginAccount.AccountId;
+
+            
 
      
             
