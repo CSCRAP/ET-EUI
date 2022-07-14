@@ -25,5 +25,7 @@ namespace ET
 		 public const ushort G2M_SessionDisconnect = 20022;
 		 public const ushort A2L_LoginAccountRequest = 20023;
 		 public const ushort L2A_LoginAccountResponse = 20024;
+		 public const ushort L2G_DisconnetGateUnitRequest = 20025;
+		 public const ushort G2L_DisconnetGateUnitResponse = 20026;
 	}
 }

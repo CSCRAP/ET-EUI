@@ -39,7 +39,8 @@ namespace ET
 				}
 
 				//TODD 显示登录之后的逻辑页面
-				
+				self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_Login);
+				self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_Lobby);
 				
 			}
 			catch (Exception e)

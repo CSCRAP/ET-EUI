@@ -37,7 +37,7 @@ namespace ET
                 return;
             }
             
-            if (Regex.IsMatch(request.AccountName.Trim(),@"^(?=.*[0-9].*)(?=.*[A-Z].*)(?=.*[a-z].*).{6,15}$") )
+            if (!Regex.IsMatch(request.AccountName.Trim(),@"^(?=.*[0-9].*)(?=.*[A-Z].*)(?=.*[a-z].*).{6,15}$") )
             {
                 response.Error = ErrorCode.ERR_AccountNameFormError;
                 reply();
@@ -45,7 +45,7 @@ namespace ET
                 return;
             }
 
-            if (Regex.IsMatch(request.Password.Trim(),@"^(?=.*[0-9].*)(?=.*[A-Z].*)(?=.*[a-z].*).{6,15}$") )
+            if (!Regex.IsMatch(request.Password.Trim(),@"^[A-Za-z0-9]+$") )
             {
                 response.Error = ErrorCode.ERR_PasswordFormError;
                 reply();
@@ -100,7 +100,7 @@ namespace ET
                         await DBManagerComponent.Instance.GetZoneDB(session.DomainZone()).Save(account);
                     }
                     
-                    //操作登录中心服
+                    //操作登录中心服,（判断是否有玩家在线，踢在线玩家下线，定好登录）
                     StartSceneConfig startSceneConfig = StartSceneConfigCategory.Instance.GetBySceneName(session.DomainZone(), "LoginCenter");
                     long loginCenterInstanceIdnstanceId = startSceneConfig.InstanceId;
                    var l2ALoginAccountResponse = (L2A_LoginAccountResponse)await ActorMessageSenderComponent.Instance.Call(loginCenterInstanceIdnstanceId,new A2L_LoginAccountRequest() { AccountId = account.Id });
@@ -121,8 +121,8 @@ namespace ET
 
                     Session otherSession = Game.EventSystem.Get(accountSessionInstanceId) as Session;
 
-                    otherSession.Send(new A2C_Disconnet(){Error = 0 });
-                    otherSession.Disconnet().Coroutine();
+                    otherSession?.Send(new A2C_Disconnet(){Error = 0 });
+                    otherSession?.Disconnet().Coroutine();
 
                     session.DomainScene().GetComponent<AccountSessionsComponent>().Add(account.Id,session.InstanceId);
                     session.AddComponent<AccountCheckOutTimeComponent, long>(account.Id);
@@ -136,7 +136,7 @@ namespace ET
                     response.Token = Token;
 
                     reply();
-                    account.Dispose();
+                    account?.Dispose();
 
                 }
                 
