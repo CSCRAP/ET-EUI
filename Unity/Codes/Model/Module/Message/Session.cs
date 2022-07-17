@@ -144,6 +144,7 @@ namespace ET
     }
 
     
+    [ChildType(typeof(RoleInfo))]
     public sealed class Session: Entity, IAwake<AService>, IDestroy
     {
         public AService AService;

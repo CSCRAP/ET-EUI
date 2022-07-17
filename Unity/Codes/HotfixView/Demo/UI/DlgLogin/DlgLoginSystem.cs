@@ -22,15 +22,21 @@ namespace ET
 		
 		public static async ETTask OnLoginClickHandler(this DlgLogin self)
 		{
-		
-		
+			
 			try
 			{
-				int errorCode = await LoginHelper.Login(
-						self.DomainScene(), 
-						ConstValue.LoginAddress, 
-						self.View.E_AccountInputField.GetComponent<InputField>().text, 
-						self.View.E_PasswordInputField.GetComponent<InputField>().text);
+				string account = self.View.E_AccountInputField.text;
+				string password = self.View.E_PasswordInputField.text;
+
+				int errorCode = await LoginHelper.Login(self.DomainScene(), ConstValue.LoginAddress, account, password);
+
+				if (errorCode != ErrorCode.ERR_Success)
+				{
+					Log.Error(errorCode.ToString());
+					return;
+				}
+				//获取区服务器列表
+				 errorCode = await LoginHelper.GetServerInfos(self.DomainScene());
 
 				if (errorCode != ErrorCode.ERR_Success)
 				{
@@ -41,6 +47,8 @@ namespace ET
 				//TODD 显示登录之后的逻辑页面
 				self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_Login);
 				self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_Lobby);
+				
+				
 				
 			}
 			catch (Exception e)

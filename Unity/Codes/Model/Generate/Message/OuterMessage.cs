@@ -539,4 +539,122 @@ namespace ET
 
 	}
 
+//定义结构体
+	[Message(OuterOpcode.ServerInfosProto)]
+	[ProtoContract]
+	public partial class ServerInfosProto: Object
+	{
+		[ProtoMember(1)]
+		public int Id { get; set; }
+
+		[ProtoMember(2)]
+		public int Status { get; set; }
+
+		[ProtoMember(3)]
+		public string ServerName { get; set; }
+
+	}
+
+	[ResponseType(nameof(A2C_GetServerInfos))]
+	[Message(OuterOpcode.C2A_GetServerInfos)]
+	[ProtoContract]
+	public partial class C2A_GetServerInfos: Object, IRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public string Token { get; set; }
+
+		[ProtoMember(2)]
+		public long AccountId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.A2C_GetServerInfos)]
+	[ProtoContract]
+	public partial class A2C_GetServerInfos: Object, IResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public List<ServerInfosProto> ServerInfosList = new List<ServerInfosProto>();
+
+	}
+
+//定义结构体
+	[Message(OuterOpcode.RoleInfoProto)]
+	[ProtoContract]
+	public partial class RoleInfoProto: Object
+	{
+		[ProtoMember(1)]
+		public long Id { get; set; }
+
+		[ProtoMember(2)]
+		public string Name { get; set; }
+
+		[ProtoMember(3)]
+		public int State { get; set; }
+
+		[ProtoMember(4)]
+		public long AccountId { get; set; }
+
+		[ProtoMember(5)]
+		public long LastLoginTime { get; set; }
+
+		[ProtoMember(6)]
+		public long CreateTime { get; set; }
+
+		[ProtoMember(7)]
+		public int ServerId { get; set; }
+
+	}
+
+	[ResponseType(nameof(A2C_CreateRole))]
+	[Message(OuterOpcode.C2A_CreateRole)]
+	[ProtoContract]
+	public partial class C2A_CreateRole: Object, IRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public string Token { get; set; }
+
+		[ProtoMember(2)]
+		public long AccountId { get; set; }
+
+		[ProtoMember(3)]
+		public string Name { get; set; }
+
+		[ProtoMember(4)]
+		public int ServerId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.A2C_CreateRole)]
+	[ProtoContract]
+	public partial class A2C_CreateRole: Object, IResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public RoleInfoProto RoleInfo { get; set; }
+
+	}
+
 }

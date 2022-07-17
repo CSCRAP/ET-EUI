@@ -23,6 +23,18 @@ namespace ET
         public const int ERR_LoginPasswordError      = 200007;  //登录密码错误
         public const int ERR_RequestRepeatedly       = 200008;  //反复多次请求
         public const int ERR_TokenError              = 200009;  //令牌Token错误
+        
+        
+        public const int ERR_RoleNameIsNull = 200010; //游戏角色名称为空
+        public const int ERR_RoleNameSame = 200011; //游戏角色名同名
+        public const int ERR_RoleNotExist = 200012; //游戏角色不存在
+
+        public const int ERR_ConnectGateKeyError = 200013; //连接Gate的令牌错误
+        
+        public const int ERR_RequestSceneTypeError = 200014; //请求的Scene错误
+
+        public const int ERR_OtherAccountLogin = 200016; //顶号登录
+
 
     }
 }
