@@ -36,7 +36,7 @@ namespace ET
 					return;
 				}
 				//获取区服务器列表
-				 errorCode = await LoginHelper.GetServerInfos(self.DomainScene());
+				 errorCode = await LoginHelper.GetServerInfos(self.ZoneScene());
 
 				if (errorCode != ErrorCode.ERR_Success)
 				{
@@ -46,7 +46,7 @@ namespace ET
 
 				//TODD 显示登录之后的逻辑页面
 				self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_Login);
-				self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_Lobby);
+				self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_Server);
 				
 				
 				
@@ -63,6 +63,7 @@ namespace ET
 		public static void HideWindow(this DlgLogin self)
 		{
 
+			//mongod --dbpath G:\program files\MongoDB\Server\5.0\data
 		}
 		
 	}

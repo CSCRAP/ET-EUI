@@ -79,7 +79,9 @@ namespace ET
 
             if (a2CGetServerInfos.Error != ErrorCode.ERR_Success)
             {
+                Log.Error(a2CGetServerInfos.Error.ToString());
                 return a2CGetServerInfos.Error;
+                
             }
 
 
@@ -146,6 +148,8 @@ namespace ET
             await ETTask.CompletedTask;
             return ErrorCode.ERR_Success;
         }
+        
+        //获取角色信息
         
     }
 }
