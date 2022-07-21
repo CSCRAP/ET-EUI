@@ -50,8 +50,9 @@ namespace ET
                     //重复角色检擦
                     var reloInfos = await DBManagerComponent.Instance.GetZoneDB(session.DomainZone())
                             .Query<RoleInfo>(d => d.Name == request.Name && d.ServerId == request.ServerId);
-
-                    if (reloInfos != null || reloInfos.Count > 0)
+                    
+                    
+                    if (reloInfos != null && reloInfos.Count > 0)
                     {
                         response.Error = ErrorCode.ERR_RoleNameSame;
                         reply();
@@ -72,8 +73,10 @@ namespace ET
                     response.RoleInfo = newRoleInfo.ToMessage();
                     reply();
                     
-                    
-                    newRoleInfo?.Dispose();
+                     reloInfos = await DBManagerComponent.Instance.GetZoneDB(session.DomainZone())
+                            .Query<RoleInfo>(d => d.Name == request.Name && d.ServerId == request.ServerId);
+
+                     newRoleInfo?.Dispose();
               
               
               

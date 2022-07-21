@@ -132,24 +132,89 @@ namespace ET
             
             zoneScene.GetComponent<RoleInfoComponent>().RoleInfos.Add(newRoleInfo);
             
-            await ETTask.CompletedTask;
             return ErrorCode.ERR_Success;
         }
         
         
         
         //删除角色
-        public static async ETTask<int> CreateRole(Scene zoneScene)
+        public static async ETTask<int> DeleteRole(Scene zoneScene)
         {
+            A2C_DeleteRole a2CDeleteRole = null;
 
+            try
+            {
+             a2CDeleteRole = (A2C_DeleteRole) await zoneScene.GetComponent<SessionComponent>().Session.Call(new C2A_DeleteRole()
+                {
+                    Token = zoneScene.GetComponent<AccountInfoComponent>().Token,
+                    AccountId = zoneScene.GetComponent<AccountInfoComponent>().AccountId,
+                    RoleInfoId = zoneScene.GetComponent<RoleInfoComponent>().CurrentRoleId,
+                    ServerId = zoneScene.GetComponent<ServerInfosComponent>().CurrentServerId
+                });
+                     
+
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.ToString());
+                return ErrorCode.ERR_NetWorkError;
+            }
+
+            if (a2CDeleteRole.Error != ErrorCode.ERR_Success)
+            {
+                Log.Error(a2CDeleteRole.Error.ToString());
+                return a2CDeleteRole.Error;
+            }
+
+            int index = zoneScene.GetComponent<RoleInfoComponent>().RoleInfos.FindIndex(((info) => { return info.Id == a2CDeleteRole.DeletedRoleInfoId; }));
+            zoneScene.GetComponent<RoleInfoComponent>().RoleInfos.RemoveAt(index);
             
-            
-            
-            await ETTask.CompletedTask;
             return ErrorCode.ERR_Success;
         }
         
         //获取角色信息
+        public static async ETTask<int> GetRoles(Scene zoneScene)
+        {
+
+            A2C_GetRoles a2CGetRoles = null;
+
+            try
+            {
+             a2CGetRoles = (A2C_GetRoles)await zoneScene.GetComponent<SessionComponent>().Session.Call(new C2A_GetRoles()
+                {
+                    AccountId = zoneScene.GetComponent<AccountInfoComponent>().AccountId,
+                    ServerId = zoneScene.GetComponent<ServerInfosComponent>().CurrentServerId,
+                    Token = zoneScene.GetComponent<AccountInfoComponent>().Token,
+                });
+
+            }
+            catch (Exception e)
+            {
+              Log.Error(e.ToString());
+              return ErrorCode.ERR_NetWorkError;
+            }
+            
+            
+
+            if (a2CGetRoles.Error != ErrorCode.ERR_Success)
+            {
+                Log.Error(a2CGetRoles.Error.ToString());
+                return a2CGetRoles.Error;
+            }
+            
+            zoneScene.GetComponent<RoleInfoComponent>().RoleInfos.Clear();
+            
+            foreach (var roleInfoProto in a2CGetRoles.RoleInfos)
+            {
+              var  roleInfo = zoneScene.GetComponent<RoleInfoComponent>().AddChild<RoleInfo>();
+              roleInfo.FromMessage(roleInfoProto);
+              zoneScene.GetComponent<RoleInfoComponent>().RoleInfos.Add(roleInfo);
+            }
+            
+            return ErrorCode.ERR_Success;
+        }
+
+      
         
     }
 }

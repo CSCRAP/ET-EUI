@@ -37,7 +37,8 @@ namespace ET
 		{
 			Scroll_Item_serverTest serverTest = self.ScrollItemServerTests[index].BindTrans(transform);
 			ServerInfo serverInfo = self.ZoneScene().GetComponent<ServerInfosComponent>().ServerInfosList[index];
-			serverTest.E_selectImage.color = serverInfo.Id == self.ZoneScene().GetComponent<ServerInfosComponent>().CurrentServerId? Color.red : Color.yellow;
+			serverTest.E_selectImage.color = serverInfo.Id == self.ZoneScene().GetComponent<ServerInfosComponent>().CurrentServerId? Color.green : Color.grey;
+			
 			serverTest.E_serverTestTipText.SetText(serverInfo.ServerName);
 			
 			serverTest.E_selectButton.AddListener(() => { self.OnSelectServerItemHandler(serverInfo.Id);});
@@ -65,9 +66,16 @@ namespace ET
 
 			try
 			{
+				int errorCode = await LoginHelper.GetRoles(self.ZoneScene());
+				if (errorCode != ErrorCode.ERR_Success)
+				{
+					Log.Error(errorCode.ToString());
+					return;
+				}
 				
-				self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_Server);
+				
 				self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_Roles);
+				self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_Server);
 
 			}
 			catch (Exception e)
