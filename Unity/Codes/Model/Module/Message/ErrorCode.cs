@@ -36,5 +36,71 @@ namespace ET
         public const int ERR_OtherAccountLogin = 200016; //顶号登录
 
 
+        public const int ERR_SessionPlayerError = 200017; 
+        public const int ERR_NonePlayerError = 200018; 
+        public const int ERR_PlayerSessionError = 200019; 
+        public const int ERR_ReEnterGameError = 200020; 
+        public const int ERR_ReEnterGameError2 = 200021; 
+        public const int ERR_EnterGameError = 200022;
+        public const int ERR_SessionStateError = 200023;
+
+        public const int ERR_NumericTypeNotExist = 200024;
+        
+        public const int ERR_NumericTypeNotAddPoint = 200025;
+        
+        public const int ERR_AddPointNotEnough = 200026;
+        
+        public const int ERR_AlreadyAdventureState = 200027;
+        
+        public const int ERR_AdventureInDying = 200028;
+        
+        public const int ERR_AdventureErrorLevel = 200029;
+        
+        public const int ERR_AdventureLevelNotEnough = 200030;
+        
+        public const int ERR_NoStartAdventure = 200031;
+        
+        public const int ERR_AdventureRoundError= 200032;
+        
+        public const int ERR_AdventureLevelIdError = 200033;
+        
+        public const int ERR_AdventureWinResultError = 200034;
+        
+        public const int ERR_AdventureResultError = 200035;
+        
+        public const int ERR_ExpNotEnough = 200036;
+
+        public const int ERR_ExpNumError = 200037;
+        
+        public const int ERR_InAdventureState = 200038;
+
+
+        public const int ERR_ItemNotExist = 200039;
+        
+        public const int ERR_BagMaxLoad = 200040;
+
+        public const int ERR_EquipItemError = 200041;
+        
+        public const int ERR_AddBagItemError = 200042;
+
+        public const int ERR_MakeConfigNotExist = 200043;
+        
+        public const int ERR_NoMakeFreeQueue  = 200044;
+        
+        public const int ERR_MakeConsumeError = 200045;
+        
+        public const int ERR_NoMakeQueueOver  = 200046;
+        
+        public const int ERR_NoTaskExist  = 200047;
+        
+        public const int ERR_BeforeTaskNoOver  = 200048;
+        
+        public const int ERR_NoTaskInfoExist  = 200049;
+        
+        public const int ERR_TaskNoCompleted  = 200050;
+        
+        public const int ERR_TaskRewarded  = 200051;
+        
+        public const int ERR_ChatMessageEmpty  = 200052;
     }
 }

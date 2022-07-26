@@ -20,11 +20,12 @@ namespace ET
                 StartSceneConfig gateConfig = RealmGateAddressHelper.GetGate(zone,accountId);
                 
                 //向gate网关，踢用户下线
-              var g2LDisconnetGateUnitResponse = (G2L_DisconnetGateUnitResponse) await MessageHelper.CallActor(gateConfig.InstanceId, new L2G_DisconnetGateUnitRequest() { AccountId = accountId });
+                var g2LDisconnetGateUnitResponse = (G2L_DisconnetGateUnitResponse) await MessageHelper.CallActor(gateConfig.InstanceId, new L2G_DisconnetGateUnitRequest() { AccountId = accountId });
 
-              response.Error = g2LDisconnetGateUnitResponse.Error;
+              
+                response.Error = g2LDisconnetGateUnitResponse.Error;
 
-              reply();
+                reply();
               
 
             }

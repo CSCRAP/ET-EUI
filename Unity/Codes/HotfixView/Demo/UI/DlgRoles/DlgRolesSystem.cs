@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System;
+﻿using System;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ET
 {
@@ -19,7 +16,8 @@ namespace ET
 			self.View.E_RolesLoopHorizontalScrollRect.
 					AddItemRefreshListener(((Transform transform, int index) => { self.OnRoleListRefreshHandler(transform, index); }));
 			self.View.E_DeleteRoleButton.AddListenerAsync((() => { return self.OnDeleteRoleClickHandler();}));
-			//self.View.E_ConfirmButton.AddListenerAsync(() => {return self.OnRoleItemClickHandler()});
+			
+			self.View.E_ConfirmButton.AddListenerAsync(() => { return self.OnConfirmClickHandler();});
 		}
 		 
 		
@@ -55,7 +53,6 @@ namespace ET
 		public static void OnRoleItemClickHandler(this DlgRoles self, long roleId)
 		{
 			self.ZoneScene().GetComponent<RoleInfoComponent>().CurrentRoleId = roleId;
-			Log.Error($"roleId{roleId}");
 			self.View.E_RolesLoopHorizontalScrollRect.RefillCells();
 		}
 
@@ -71,7 +68,6 @@ namespace ET
 
 			try
 			{
-
 				int errorCode =	await LoginHelper.CreateRole(self.ZoneScene(), name);
 				if (errorCode != ErrorCode.ERR_Success)
 				{
@@ -113,6 +109,41 @@ namespace ET
 			{
 				Log.Error(e.ToString());
 				
+			}
+		}
+
+		public static async ETTask OnConfirmClickHandler(this DlgRoles self)
+		{
+			if (self.ZoneScene().GetComponent<RoleInfoComponent>().CurrentRoleId == 0)
+			{
+				Log.Error("请选择游戏角色");				
+				return;
+			}
+
+			try
+			{
+			
+				int	errorCode = await LoginHelper.GetRealmKey(self.ZoneScene());
+
+				if (errorCode != ErrorCode.ERR_Success)
+				{
+					Log.Error(errorCode.ToString());
+					return;
+				}
+
+				errorCode = await LoginHelper.EnterGame(self.ZoneScene());
+				if (errorCode != ErrorCode.ERR_Success)
+				{
+					Log.Error(errorCode.ToString());
+					return;
+				}
+				
+				self?.ZoneScene()?.GetComponent<UIComponent>()?.CloseWindow(WindowID.WindowID_Roles);
+				
+			}
+			catch (Exception e)
+			{
+				Log.Error(e.ToString());
 			}
 			
 			

@@ -10,28 +10,33 @@ namespace ET
 
             long accountId = request.AccountId;
 
-            using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.GateLoginLock,accountId.GetHashCode()))
+            using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.LoginGate,accountId.GetHashCode()))
             {
                PlayerComponent playerComponent = scene.GetComponent<PlayerComponent>();
-               Player gateUnit = playerComponent.Get(accountId);
-               if (gateUnit == null)
+               Player player = playerComponent.Get(accountId);
+               
+               if (player == null)
                {
                    reply();
                    return;
                }
                
-               playerComponent.Remove(accountId);
-               
-               //下线处理逻辑，这里临时处理
-               gateUnit.Dispose();
-               
-               
-               
+                
+               scene.GetComponent<GateSessionKeyComponent>().Remove(accountId);
+               Session gateSession = Game.EventSystem.Get(player.SessionInstanceId) as Session;
+               if (gateSession != null && !gateSession.IsDisposed)
+               {
+                   gateSession.Send(new A2C_Disconnet(){Error = ErrorCode.ERR_OtherAccountLogin});
+                   gateSession?.Disconnet().Coroutine();
+               }
+
+               player.SessionInstanceId = 0;
+               player.AddComponent<PlayerOfflineOutTimeComponent>();
                
             }
 
             reply();
-            await ETTask.CompletedTask;
+            
         }
     }
 }

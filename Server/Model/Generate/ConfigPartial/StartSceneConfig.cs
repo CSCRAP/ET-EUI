@@ -8,11 +8,15 @@ namespace ET
     {
         public MultiMap<int, StartSceneConfig> Gates = new MultiMap<int, StartSceneConfig>();
         
+        public Dictionary<int, StartSceneConfig> Realms = new Dictionary<int, StartSceneConfig>();
+        
         public MultiMap<int, StartSceneConfig> ProcessScenes = new MultiMap<int, StartSceneConfig>();
         
         public Dictionary<long, Dictionary<string, StartSceneConfig>> ZoneScenesByName = new Dictionary<long, Dictionary<string, StartSceneConfig>>();
 
         public StartSceneConfig LocationConfig;
+        
+        public StartSceneConfig LoginCenterConfig;
         
         public List<StartSceneConfig> Robots = new List<StartSceneConfig>();
         
@@ -48,6 +52,12 @@ namespace ET
                         break;
                     case SceneType.Robot:
                         this.Robots.Add(startSceneConfig);
+                        break;
+                    case SceneType.Realm:
+                        this.Realms.Add(startSceneConfig.Zone, startSceneConfig);
+                        break;
+                    case SceneType.LoginCenter:
+                        this.LoginCenterConfig = startSceneConfig;
                         break;
                 }
             }
