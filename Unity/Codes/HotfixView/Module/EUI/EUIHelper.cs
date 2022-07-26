@@ -28,6 +28,27 @@ namespace ET
             Label.text = content;
         }
         
+        public static void SetVisibleWithScale(this UIBehaviour uiBehaviour, bool isVisible)
+        {
+            if (null == uiBehaviour)
+            {
+                Log.Error("uibehaviour is null!");
+                return;
+            }
+
+            if (null == uiBehaviour.gameObject)
+            {
+                Log.Error("uiBehaviour gameObject is null!");
+                return;
+            }
+            
+            if (uiBehaviour.gameObject.activeSelf == isVisible)
+            {
+                return;
+            }
+            uiBehaviour.transform.localScale = isVisible ? Vector3.one : Vector3.zero;
+        }
+        
         public static void SetVisible(this UIBehaviour uiBehaviour, bool isVisible)
         {
             if (null == uiBehaviour)
@@ -57,6 +78,24 @@ namespace ET
             loopScrollRect.RefillCells();
         }
 
+        
+        public static void SetVisibleWithScale(this Transform transform, bool isVisible)
+        {
+            if (null == transform)
+            {
+                Log.Error("uibehaviour is null!");
+                return;
+            }
+
+            if (null == transform.gameObject)
+            {
+                Log.Error("uiBehaviour gameObject is null!");
+                return;
+            }
+            
+            transform.localScale = isVisible ? Vector3.one : Vector3.zero;
+        }
+        
         public static void SetVisible(this Transform transform, bool isVisible)
         {
             if (null == transform)
@@ -269,10 +308,18 @@ namespace ET
         /// </summary>
         /// <OtherParam name="self"></OtherParam>
         /// <OtherParam name="closeButton"></OtherParam>
-        public static void RegisterCloseEvent<T>(this Entity self,Button closeButton)  where T : Entity,IAwake,IUILogic
+        public static void RegisterCloseEvent<T>(this Entity self,Button closeButton,bool isClose = false)  where T : Entity,IAwake,IUILogic
         {
             closeButton.onClick.RemoveAllListeners();
-            closeButton.onClick.AddListener(() => { self.DomainScene().GetComponent<UIComponent>().HideWindow(self.GetParent<UIBaseWindow>().WindowID); });
+            if (isClose)
+            {
+                closeButton.onClick.AddListener(() => { self.DomainScene().GetComponent<UIComponent>().CloseWindow(self.GetParent<UIBaseWindow>().WindowID); });
+
+            }
+            else
+            {
+                closeButton.onClick.AddListener(() => { self.DomainScene().GetComponent<UIComponent>().HideWindow(self.GetParent<UIBaseWindow>().WindowID); });
+            }
         }
 
 

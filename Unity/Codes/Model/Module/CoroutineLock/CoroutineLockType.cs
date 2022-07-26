@@ -10,6 +10,7 @@ namespace ET
         public const int DB = 5;
         public const int Resources = 6;
         public const int ResourcesLoader = 7;
+<<<<<<< HEAD
         
         public const int LoginAccount = 8;              
         public const int LoginCenterLock = 9;
@@ -22,6 +23,9 @@ namespace ET
         public const int LoginGate = 13;
 
         public const int UnitCacheGet = 14;
+=======
+        public const int LoadUIBaseWindows = 8;
+>>>>>>> main
 
         public const int Max = 100; // 这个必须最大
     }
